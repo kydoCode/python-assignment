@@ -1,47 +1,57 @@
 [
     {
         "name": "Bulbizarre",
-        "type": "PLANTE",
+        "type": "Plante",
         "abilities": "Engrais"
     },
     {
         "name": "Herbizarre",
-        "type": "PLANTE",
+        "type": "Plante",
         "abilities": "Engrais"
     },
     {
         "name": "Florizarre",
-        "type": "PLANTE",
+        "type": "Plante",
         "abilities": "Engrais"
     },
     {
-        "name": "Salamèche",
-        "type": "FEU",
+        "name": "Salam\u00e8che",
+        "type": "Feu",
         "abilities": "Brasier"
     },
     {
         "name": "Reptincel",
-        "type": "FEU",
+        "type": "Feu",
         "abilities": "Brasier"
     },
     {
         "name": "Dracaufeu",
-        "type": "FEU",
+        "type": "Feu",
         "abilities": "Brasier"
     },
     {
         "name": "Carapuce",
-        "type": "EAU",
+        "type": "Eau",
         "abilities": "Torrent"
     },
     {
         "name": "Carabaffe",
-        "type": "EAU",
+        "type": "Eau",
         "abilities": "Torrent"
     },
     {
         "name": "Tortank",
-        "type": "EAU",
+        "type": "Eau",
         "abilities": "Torrent"
+    },
+    {
+        "name": "KrazyKode",
+        "type": "Electrik",
+        "abilities": "Kode, Koffee"
+    },
+    {
+        "name": "ClassMaker",
+        "type": "T\u00e9n\u00e8bres",
+        "abilities": "Refactor, Instanciation"
     }
 ]
