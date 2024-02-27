@@ -54,7 +54,7 @@ listbox.pack()
 # pokeListEng = ["Bulbasaur","Ivysaur","Venusaur","Charmander","Charmeleon","Charizard","Squirtle","Wartortle","Blastoise","Caterpie","Metapod","Butterfree","Weedle","Kakuna","Beedrill","Pidgey","Pidgeotto","Pidgeot","Rattata","Raticate","Spearow","Fearow","Ekans","Arbok","Pikachu","Raichu","Sandshrew","Sandslash","Nidoran","Nidorina","Nidoqueen","Nidoran","Nidorino","Nidoking","Clefairy","Clefable","Vulpix","Ninetales","Jigglypuff","Wigglytuff","Zubat","Golbat","Oddish","Gloom","Vileplume","Paras","Parasect","Venonat","Venomoth","Diglett","Dugtrio","Meowth","Persian","Psyduck","Golduck","Mankey","Primeape","Growlithe","Arcanine","Poliwag","Poliwhirl","Poliwrath","Abra","Kadabra","Alakazam","Machop","Machoke","Machamp","Bellsprout","Weepinbell","Victreebel","Tentacool","Tentacruel","Geodude","Graveler","Golem","Ponyta","Rapidash","Slowpoke","Slowbro","Magnemite","Magneton","Farfetch'd","Doduo","Dodrio","Seel","Dewgong","Grimer","Muk","Shellder","Cloyster","Gastly","Haunter","Gengar","Onix","Drowzee","Hypno","Krabby","Kingler","Voltorb","Electrode","Exeggcute","Exeggutor","Cubone","Marowak","Hitmonlee","Hitmonchan","Lickitung","Koffing","Weezing","Rhyhorn","Rhydon","Chansey","Tangela","Kangaskhan","Horsea","Seadra","Goldeen","Seaking","Staryu","Starmie","Mr. Mime","Scyther","Jynx","Electabuzz","Magmar","Pinsir","Tauros","Magikarp","Gyarados","Lapras","Ditto","Eevee","Vaporeon","Jolteon","Flareon","Porygon","Omanyte","Omastar","Kabuto","Kabutops","Aerodactyl","Snorlax","Articuno","Zapdos","Moltres","Dratini","Dragonair","Dragonite","Mewtwo","Mew"]
 pokeListArr = {0: {'name': 'Bulbizarre', 'type': f'{Types.PLANTE.value}', 'abilities': 'Engrais'}, 1: {'name': 'Salamèche', 'type': f'{Types.FEU.value}', 'abilities': 'Brasier'}, 2: {'name': 'Carapuce', 'type': f'{Types.EAU.value}', 'abilities': 'Torrent'}}
 
-
+# poke, value in pokeListArr.items() -> check
 for poke in pokeListArr:
         listbox.insert(tk.END, f"{pokeListArr[poke]['name']}")#, command=open_desc)
 
@@ -64,6 +64,7 @@ for poke in pokeListArr:
 #     return li_index
 
 # listbox.bind('<<ListboxSelect>>', retrieve_index)
+
 
 
 
@@ -85,9 +86,9 @@ def open_desc():
     # checkList = []
     checkItem = current_item
     print("checkItem vaut: (AVB)", checkItem)
-    print("current item vayt: (AVB)", current_item)
-    for current_item in pokeListArr:
-        print("currentitem vaut dans la boucle:", current_item)
+    print("current_item vayt: (AVB)", current_item)
+    for key, checkItem in pokeListArr.items():
+        print("current_item vaut dans la boucle:", checkItem)
         #for i in range(i=0, i=1, 1):
         #    i += 1
         # checkArray = 
@@ -96,13 +97,15 @@ def open_desc():
         # for i in pokeListArr:
         #     if i == pokeListArr[current_item]['name']: 
               # if len(pokeListArr)-1 == True:
-        if current_item < 1: #current_item+1:
+        ##if current_item < 1: #current_item+1:
         #if current_item == checkItem:
-            print(current_item, checkItem)
-            messagebox.showinfo(f"Détail de {pokeListArr[current_item]['name']}\n", f"{pokeListArr[current_item]['name']}\n{pokeListArr[current_item]['type']}\n{pokeListArr[current_item]['abilities']}")
-            print(current_item, checkItem)
-        else:
-            break
+        for pokey[0] in current_item:
+            if checkItem == current_item:
+                print(current_item, checkItem)
+                messagebox.showinfo(f"Détail de {pokeListArr[current_item]['name']}\n", f"{pokeListArr[current_item]['name']}\n{pokeListArr[current_item]['type']}\n{pokeListArr[current_item]['abilities']}")
+                print(current_item, checkItem)
+            else:
+                break
     #pass
     
         
@@ -135,6 +138,6 @@ def add_pokemon():
     pokeListArr[i]['type'] = Types
     pokeListArr[i]['abilities'] = ""
 
-    pokeListArr[j] = {'name': f'{}', 'type': Types, 'abilities': f'{}'}
+   # pokeListArr[j] = {'name': f'{}', 'type': Types, 'abilities': f'{}'}
 
 fenetre.mainloop()
