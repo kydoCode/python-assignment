@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, simpledialog
 from enum import Enum
-from pickle import *
+import json
+from tkinter import ttk
 
 class Types(Enum):
     ACIER = "Acier"
@@ -23,20 +24,40 @@ class Types(Enum):
     TENEBRES = "Ténèbres"
     VOL = "Vol"
 
+# Liste des types de Pokémon
+TYPES_POKEMON = [type_.value for type_ in Types]
+
 class Pokemon:
-    def __init__(self, name, abilities): #desc,
+    def __init__(self, name, p_type, abilities):
         self.name = name
-        #self.desc = desc
-        self.type = Types
+        self.type = p_type
         self.abilities = abilities
 
-# MAIN VIEW
+# Charge les données des Pokémon depuis un fichier JSON
+def load_pokemons():
+    try:
+        with open("pokemons.json", "r") as f:
+            pokemons_data = json.load(f)
+        pokemons = [Pokemon(data['name'], Types[data['type']], data['abilities']) for data in pokemons_data]
+    except (FileNotFoundError, json.JSONDecodeError):
+        pokemons = []
+    return pokemons
+
+# Enregistre les données des Pokémon dans un fichier JSON
+def save_pokemons(pokemons):
+    pokemons_data = [{'name': pokemon.name, 'type': pokemon.type.value, 'abilities': pokemon.abilities} for pokemon in pokemons]
+    with open("pokemons.json", "w") as f:
+        json.dump(pokemons_data, f, indent=4)
+
+# Crée une nouvelle instance de la classe Tk pour la fenêtre principale de l'application
 fenetre = tk.Tk()
 fenetre.title("ポケモンずかん - [Pokédex]")
 fenetre.geometry("336x432")
 
-# Affichage du logo Pokémon
+# Charge les données des Pokémon depuis le fichier JSON
+pokeListArr = load_pokemons()
 
+# Affichage du logo Pokémon
 logo = tk.PhotoImage(file="Int_Poke_logo.png")
 etiquetteThree = tk.Label(fenetre, image=logo)
 etiquetteThree.place(x=0, y=168)
@@ -49,95 +70,103 @@ etiquette.pack()
 listbox = tk.Listbox(fenetre)
 listbox.pack()
 
+# Remplir la listbox avec les noms des Pokémon
+for pokemon in pokeListArr:
+    listbox.insert(tk.END, pokemon.name)
 
-# pokeList = ["Bulbizarre", "Salamèche", "Carapuce", "Chenipan", "Pikachu", "Roucool", "Rattata"]
-# pokeListEng = ["Bulbasaur","Ivysaur","Venusaur","Charmander","Charmeleon","Charizard","Squirtle","Wartortle","Blastoise","Caterpie","Metapod","Butterfree","Weedle","Kakuna","Beedrill","Pidgey","Pidgeotto","Pidgeot","Rattata","Raticate","Spearow","Fearow","Ekans","Arbok","Pikachu","Raichu","Sandshrew","Sandslash","Nidoran","Nidorina","Nidoqueen","Nidoran","Nidorino","Nidoking","Clefairy","Clefable","Vulpix","Ninetales","Jigglypuff","Wigglytuff","Zubat","Golbat","Oddish","Gloom","Vileplume","Paras","Parasect","Venonat","Venomoth","Diglett","Dugtrio","Meowth","Persian","Psyduck","Golduck","Mankey","Primeape","Growlithe","Arcanine","Poliwag","Poliwhirl","Poliwrath","Abra","Kadabra","Alakazam","Machop","Machoke","Machamp","Bellsprout","Weepinbell","Victreebel","Tentacool","Tentacruel","Geodude","Graveler","Golem","Ponyta","Rapidash","Slowpoke","Slowbro","Magnemite","Magneton","Farfetch'd","Doduo","Dodrio","Seel","Dewgong","Grimer","Muk","Shellder","Cloyster","Gastly","Haunter","Gengar","Onix","Drowzee","Hypno","Krabby","Kingler","Voltorb","Electrode","Exeggcute","Exeggutor","Cubone","Marowak","Hitmonlee","Hitmonchan","Lickitung","Koffing","Weezing","Rhyhorn","Rhydon","Chansey","Tangela","Kangaskhan","Horsea","Seadra","Goldeen","Seaking","Staryu","Starmie","Mr. Mime","Scyther","Jynx","Electabuzz","Magmar","Pinsir","Tauros","Magikarp","Gyarados","Lapras","Ditto","Eevee","Vaporeon","Jolteon","Flareon","Porygon","Omanyte","Omastar","Kabuto","Kabutops","Aerodactyl","Snorlax","Articuno","Zapdos","Moltres","Dratini","Dragonair","Dragonite","Mewtwo","Mew"]
-pokeListArr = {0: {'name': 'Bulbizarre', 'type': f'{Types.PLANTE.value}', 'abilities': 'Engrais'}, 1: {'name': 'Salamèche', 'type': f'{Types.FEU.value}', 'abilities': 'Brasier'}, 2: {'name': 'Carapuce', 'type': f'{Types.EAU.value}', 'abilities': 'Torrent'}}
-
-# poke, value in pokeListArr.items() -> check
-for poke in pokeListArr:
-        listbox.insert(tk.END, f"{pokeListArr[poke]['name']}")#, command=open_desc)
-
-# def retrieve_index():
-#     li_index = listbox.curselection()
-#     print(li_index)
-#     return li_index
-
-# listbox.bind('<<ListboxSelect>>', retrieve_index)
-
-
-
-
-# Button add pokemon : champs de saisie trois valeurs: nom champ libre, type enum menu déroulant, capacité s champ libre
-    
+# Affiche les détails du Pokémon sélectionné
 def open_desc():
     current_indexes = listbox.curselection()
     if current_indexes:
-         current_index = current_indexes[0]
-         current_item = listbox.get(current_index)
-         print("Item sélectionné: ", current_item)
-         
-         # etiquetteFour = tk.Label(fenetre, text=f"Détail de {pokeListArr[current_item]['name']}\n", f"{pokeListArr[current_item]['name']}\n{pokeListArr[current_item]['type']}\n{pokeListArr[current_item]['abilities']}")
-         # messagebox.showinfo(BulbizarreetiquetteFour.pack())
-    # i = 0
-    # while i <= 1: 
-    # poke = current_item
-    
-    # checkList = []
-    checkItem = current_item
-    print("checkItem vaut: (AVB)", checkItem)
-    print("current_item vayt: (AVB)", current_item)
-    for key, checkItem in pokeListArr.items():
-        print("current_item vaut dans la boucle:", checkItem)
-        #for i in range(i=0, i=1, 1):
-        #    i += 1
-        # checkArray = 
-        # if pokeListArr[current_item]['name']
-        # i =[]
-        # for i in pokeListArr:
-        #     if i == pokeListArr[current_item]['name']: 
-              # if len(pokeListArr)-1 == True:
-        ##if current_item < 1: #current_item+1:
-        #if current_item == checkItem:
-        for pokey[0] in current_item:
-            if checkItem == current_item:
-                print(current_item, checkItem)
-                messagebox.showinfo(f"Détail de {pokeListArr[current_item]['name']}\n", f"{pokeListArr[current_item]['name']}\n{pokeListArr[current_item]['type']}\n{pokeListArr[current_item]['abilities']}")
-                print(current_item, checkItem)
-            else:
-                break
-    #pass
-    
+        current_index = current_indexes[0]
+        current_pokemon = pokeListArr[current_index]
         
+        # Vérifie si le type du Pokémon est bien un objet Enum
+        if isinstance(current_pokemon.type, Types):
+            pokemon_type = current_pokemon.type.value
+        else:
+            pokemon_type = current_pokemon.type
         
-    # return current_item
-   
-    
+        # Affiche les détails du Pokémon dans une boîte de message
+        messagebox.showinfo("Détails Pokémon", f"Nom: {current_pokemon.name}\nType: {pokemon_type}\nCapacités: {current_pokemon.abilities}")
 
+
+# Bouton pour afficher les détails du Pokémon sélectionné
 bouton = tk.Button(fenetre, text="Détails", command=open_desc)
 bouton.pack()
 
-# Instance de classe Pokemon()
-# Savuegarder au tableau puis dans le fichier (les deux en même temps)
+# Définition de la fonction pour afficher une boîte de dialogue personnalisée
+def ask_type():
+    # Création d'une nouvelle fenêtre
+    type_window = tk.Toplevel(fenetre)
+    type_window.title("Sélectionnez le type du nouveau Pokémon")
 
-boutonTwo = tk.Button(fenetre, text="Nouveau Pokémon")#, command)
+    # Étiquette pour guider l'utilisateur
+    label = tk.Label(type_window, text="Sélectionnez le type du nouveau Pokémon:")
+    label.pack()
+
+    # Liste déroulante pour les types de Pokémon
+    selected_type = tk.StringVar(type_window)
+    selected_type.set(TYPES_POKEMON[0])  # Sélectionne le premier type par défaut
+    dropdown = ttk.Combobox(type_window, textvariable=selected_type, values=TYPES_POKEMON)
+    dropdown.pack()
+
+    # Bouton pour valider la sélection
+    button = tk.Button(type_window, text="Valider", command=lambda: type_window.destroy())
+    button.pack()
+
+    # Attend que la fenêtre soit fermée avant de renvoyer la sélection
+    type_window.wait_window()
+
+    # Renvoie le type sélectionné
+    return selected_type.get()
+
+# Fonction pour ajouter un nouveau Pokémon
+def add_new_pokemon():
+    # Demande à l'utilisateur d'entrer le nom du nouveau Pokémon
+    name = simpledialog.askstring("Nouveau Pokémon", "Entrez le nom du nouveau Pokémon:")
+    
+    if name:
+        # Demande à l'utilisateur de sélectionner le type du nouveau Pokémon
+        p_type = ask_type()
+        
+        if p_type:
+            # Demande à l'utilisateur d'entrer les capacités du nouveau Pokémon
+            abilities = simpledialog.askstring("Nouveau Pokémon", "Entrez les capacités du nouveau Pokémon:")
+            
+            if abilities:  
+                # Crée un nouvel objet Pokemon avec les informations saisies par l'utilisateur
+                new_pokemon = Pokemon(name, p_type, abilities)
+                
+                # Ajoute le nouveau Pokémon à la liste pokeListArr
+                pokeListArr.append(new_pokemon)
+                
+                # Rafraîchit la listbox pour afficher le nouveau Pokémon ajouté
+                listbox.insert(tk.END, new_pokemon.name)
+                
+                # Affiche un message de confirmation
+                messagebox.showinfo("Succès", "Le nouveau Pokémon a été ajouté avec succès !")
+            else:
+                # Affiche un message d'erreur si les capacités n'ont pas été saisies
+                messagebox.showerror("Erreur", "Veuillez saisir les capacités pour ajouter un nouveau Pokémon.")
+        else:
+            # Affiche un message d'erreur si le type de Pokémon n'a pas été sélectionné
+            messagebox.showerror("Erreur", "Veuillez sélectionner un type de Pokémon.")
+    else:
+        # Affiche un message d'erreur si le nom du Pokémon n'a pas été saisi
+        messagebox.showerror("Erreur", "Veuillez saisir un nom pour ajouter un nouveau Pokémon.")
+
+# Mettez à jour le bouton pour ajouter un nouveau Pokémon pour appeler la fonction add_new_pokemon()
+boutonTwo = tk.Button(fenetre, text="Nouveau Pokémon", command=add_new_pokemon)
 boutonTwo.pack()
 
+# boutonTwo = tk.Button(fenetre, text="Nouveau Pokémon", command=save_pokemons)
+#boutonTwo = tk.Button(fenetre, text="Nouveau Pokémon", command=add_new_pokemon)
+
+
+# Label pour afficher la version de l'application
 etiquetteTwo = tk.Label(fenetre, text="[Pokédex]- v1 by Kody san")
 etiquetteTwo.pack()
 
-# DETAIL VIEW
-
-# ADD POKEMON VIEW
-
-def add_pokemon():
-    i = len(pokeListArr) + 1
-    print("Valeur de i:", i)
-    pokeListArr[i] = {}
-    pokeListArr[i]['name'] = "" #/.get()
-    pokeListArr[i]['type'] = Types
-    pokeListArr[i]['abilities'] = ""
-
-   # pokeListArr[j] = {'name': f'{}', 'type': Types, 'abilities': f'{}'}
-
+# Lancer la boucle principale de l'interface utilisateur
 fenetre.mainloop()

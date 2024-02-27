@@ -1,0 +1,47 @@
+[
+    {
+        "name": "Bulbizarre",
+        "type": "PLANTE",
+        "abilities": "Engrais"
+    },
+    {
+        "name": "Herbizarre",
+        "type": "PLANTE",
+        "abilities": "Engrais"
+    },
+    {
+        "name": "Florizarre",
+        "type": "PLANTE",
+        "abilities": "Engrais"
+    },
+    {
+        "name": "Salamèche",
+        "type": "FEU",
+        "abilities": "Brasier"
+    },
+    {
+        "name": "Reptincel",
+        "type": "FEU",
+        "abilities": "Brasier"
+    },
+    {
+        "name": "Dracaufeu",
+        "type": "FEU",
+        "abilities": "Brasier"
+    },
+    {
+        "name": "Carapuce",
+        "type": "EAU",
+        "abilities": "Torrent"
+    },
+    {
+        "name": "Carabaffe",
+        "type": "EAU",
+        "abilities": "Torrent"
+    },
+    {
+        "name": "Tortank",
+        "type": "EAU",
+        "abilities": "Torrent"
+    }
+]
