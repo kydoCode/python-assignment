@@ -37,17 +37,28 @@ class Pokemon:
         self.abilities = abilities
 
 # Function to load Pokemons from a JSON file
+
+# Function to load Pokemons from a JSON file
 def load_pokemons():
     try:
         with open("pokemons.json", "r") as f:
             pokemons_data = json.load(f)
-        pokemons = [Pokemon(data['name'], Types[data['type']], data['abilities'].split(', ')) for data in pokemons_data]
+
+        def string_to_types(t):
+            return Types[t.upper()]
+
+        pokemons = []
+        for data in pokemons_data:
+            try:
+                pokemons.append(Pokemon(data['name'], string_to_types(data['type']), data['abilities'].split(', ')))
+            except KeyError as e:
+                messagebox.showerror("Erreur de type", f"Le type de Pokémon '{e.args[0]}' n'est pas valide.")
+
     except FileNotFoundError:
         messagebox.showwarning("Fichier manquant", "Le fichier de données des Pokémon n'a pas été trouvé.")
-        pokemons = []
     except json.JSONDecodeError:
         messagebox.showerror("Erreur de format", "Le fichier de données des Pokémon est corrompu.")
-        pokemons = []
+
     return pokemons
 
 # Function to save Pokemons to a JSON file
@@ -92,13 +103,13 @@ def open_desc():
     if current_indexes:
         current_index = current_indexes[0]
         current_pokemon = pokeListArr[current_index]
-        
+
         if isinstance(current_pokemon.type, Types):
             pokemon_type = current_pokemon.type.value
         else:
             pokemon_type = current_pokemon.type
-        
-        messagebox.showinfo("Détails Pokémon", f"Nom: {current_pokemon.name}\nType: {pokemon_type}\nCapacités: {current_pokemon.abilities}")
+
+        messagebox.showinfo("Détails Pokémon", f"Nom: {current_pokemon.name}\nType: {pokemon_type}\nCapacités: {', '.join(current_pokemon.abilities)}")
 
 # Add a button to the main window to display Pokemon details
 bouton = tk.Button(fenetre, text="Détails", command=open_desc)
@@ -118,7 +129,7 @@ def ask_type():
     dropdown.pack()
 
     def on_ok():
-        selected_type_str = selected_type.get().upper()
+        selected_type_str = selected_type.get()  # Removed .lower() here
         type_window.destroy()
         return selected_type_str
 
@@ -127,7 +138,7 @@ def ask_type():
 
     type_window.grab_set()  # Prevents interaction with the main window until the type_window is closed
     type_window.wait_window()
-    return on_ok()  # Add this line to return the selected type or None if the user clicked cancel
+    return on_ok()
     
 # Function to add a new Pokemon
 def add_new_pokemon():
